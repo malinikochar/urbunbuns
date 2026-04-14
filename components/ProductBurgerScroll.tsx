@@ -58,11 +58,25 @@ export default function ProductBurgerScroll({
     const ir = img.naturalWidth / img.naturalHeight;
     const cr = W / H;
     let dw: number, dh: number, dx: number, dy: number;
+
+    const isMobile = W < 768;
+
     if (ir > cr) {
       dw = W; dh = W / ir; dx = 0; dy = (H - dh) / 2;
     } else {
       dh = H; dw = H * ir; dx = (W - dw) / 2; dy = 0;
     }
+
+    // Apply Mobile Zoom and Top-Alignment
+    if (isMobile) {
+      const zoomScale = 1.35; // Zoom in 35%
+      dw *= zoomScale;
+      dh *= zoomScale;
+      dx = (W - dw) / 2; // Keep centered horizontally
+      // Position burger in top 40% of screen
+      dy = (H * 0.35) - (dh / 2); 
+    }
+
     ctx.drawImage(img, dx, dy, dw, dh);
     ctx.restore();
   }, [totalFrames]);
