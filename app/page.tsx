@@ -116,7 +116,7 @@ export default function Home() {
       <Footer />
 
       {/* ── Left / Right Navigation Arrows ── */}
-      <div className="fixed left-0 right-0 top-1/2 -translate-y-1/2 flex justify-between px-4 md:px-8 z-40 pointer-events-none">
+      <div className="fixed left-0 right-0 top-1/2 -translate-y-1/2 hidden md:flex justify-between px-4 md:px-8 z-40 pointer-events-none">
         <motion.button
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.9 }}
@@ -138,7 +138,7 @@ export default function Home() {
       </div>
 
       {/* ── Bottom Pill Selector ── */}
-      <div className="fixed bottom-8 left-1/2 -translate-x-1/2 z-40 flex items-center gap-2 bg-black/40 backdrop-blur-xl border border-white/10 rounded-full px-4 py-3 shadow-xl">
+      <div className="fixed bottom-6 md:bottom-8 left-1/2 -translate-x-1/2 z-40 flex items-center gap-1.5 md:gap-2 bg-black/40 backdrop-blur-xl border border-white/10 rounded-full px-3 md:px-4 py-2 md:py-3 shadow-xl max-w-[90vw] overflow-x-auto no-scrollbar">
         {products.map((p, i) => (
           <button
             key={p.id}
@@ -147,7 +147,7 @@ export default function Home() {
               setCurrentIndex(i);
               window.scrollTo({ top: 0, behavior: "instant" });
             }}
-            className="relative flex items-center gap-2 px-4 py-2 rounded-full transition-all duration-300"
+            className="relative flex items-center gap-2 px-3 md:px-4 py-1.5 md:py-2 rounded-full transition-all duration-300 whitespace-nowrap"
             style={{
               background:
                 i === currentIndex ? `${p.themeColor}25` : "transparent",

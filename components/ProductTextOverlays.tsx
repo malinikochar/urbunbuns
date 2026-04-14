@@ -21,7 +21,6 @@ function getSectionOpacity(
   end: number
 ): number {
   const fadeZone = 0.05;
-  // special-case: first section starts at 0, no fade-in needed
   if (start === 0 && progress < fadeZone) return 1;
   if (progress < start) return 0;
   if (progress < start + fadeZone)
@@ -36,10 +35,6 @@ export default function ProductTextOverlays({
   product,
   scrollProgress,
 }: ProductTextOverlaysProps) {
-  const activeSection = sections.find(
-    (s) => scrollProgress >= s.start && scrollProgress < s.end
-  );
-
   const opacities = sections.map((s) =>
     getSectionOpacity(scrollProgress, s.start, s.end)
   );
@@ -49,19 +44,19 @@ export default function ProductTextOverlays({
       {/* Section 0: Intro */}
       <motion.div
         style={{ opacity: opacities[0] }}
-        className="absolute inset-0 flex flex-col justify-end pb-16 px-8 md:px-16 lg:px-24 max-w-2xl"
+        className="absolute inset-0 flex flex-col justify-end pb-24 md:pb-16 px-6 md:px-16 lg:px-24 max-w-2xl"
       >
         <motion.span
-          className="text-xs font-semibold tracking-[0.3em] uppercase mb-3"
+          className="text-[10px] md:text-xs font-semibold tracking-[0.3em] uppercase mb-2 md:mb-3"
           style={{ color: product.themeColor }}
         >
           Urban Buns Presents
         </motion.span>
-        <h1 className="text-5xl md:text-7xl font-black text-white leading-none mb-2">
+        <h1 className="text-4xl md:text-7xl font-black text-white leading-none mb-1 md:mb-2">
           {product.name}
         </h1>
         <h2
-          className="text-5xl md:text-7xl font-black leading-none mb-6"
+          className="text-4xl md:text-7xl font-black leading-none mb-4 md:mb-6"
           style={{
             background: `linear-gradient(135deg, ${product.themeColor}, #fff)`,
             WebkitBackgroundClip: "text",
@@ -70,15 +65,16 @@ export default function ProductTextOverlays({
         >
           {product.subName}
         </h2>
-        <p className="text-sm md:text-base text-neutral-300 max-w-sm leading-relaxed">
+        <p className="text-xs md:text-base text-neutral-300 max-w-[280px] md:max-w-sm leading-relaxed">
           {product.description}
         </p>
+        
         {/* Features pills */}
-        <div className="flex flex-wrap gap-2 mt-6">
+        <div className="flex flex-wrap gap-1.5 md:gap-2 mt-4 md:mt-6">
           {product.features.map((f) => (
             <span
               key={f}
-              className="px-3 py-1 rounded-full text-xs font-medium bg-white/10 text-white border border-white/10 backdrop-blur-sm"
+              className="px-2 md:px-3 py-0.5 md:py-1 rounded-full text-[9px] md:text-xs font-medium bg-white/10 text-white border border-white/10 backdrop-blur-sm"
             >
               {f}
             </span>
@@ -86,20 +82,20 @@ export default function ProductTextOverlays({
         </div>
       </motion.div>
 
-      {/* Stats - always visible in intro */}
+      {/* Stats - bottom right on desktop, top right on mobile to avoid pill menu */}
       <motion.div
         style={{ opacity: opacities[0] }}
-        className="absolute right-8 md:right-16 bottom-16 flex flex-col gap-6"
+        className="absolute right-6 md:right-16 top-24 md:top-auto md:bottom-16 flex flex-col gap-4 md:gap-6"
       >
         {product.stats.map((stat) => (
           <div key={stat.label} className="text-right">
             <div
-              className="text-3xl font-black"
+              className="text-xl md:text-3xl font-black"
               style={{ color: product.themeColor }}
             >
               {stat.value}
             </div>
-            <div className="text-xs text-neutral-400 uppercase tracking-widest">
+            <div className="text-[9px] md:text-xs text-neutral-400 uppercase tracking-widest">
               {stat.label}
             </div>
           </div>
@@ -109,18 +105,18 @@ export default function ProductTextOverlays({
       {/* Section 1: Details */}
       <motion.div
         style={{ opacity: opacities[1] }}
-        className="absolute inset-0 flex flex-col justify-center px-8 md:px-16 lg:px-24 max-w-xl"
+        className="absolute inset-0 flex flex-col justify-center px-6 md:px-16 lg:px-24 max-w-xl"
       >
         <span
-          className="text-xs font-semibold tracking-[0.3em] uppercase mb-4"
+          className="text-[10px] md:text-xs font-semibold tracking-[0.3em] uppercase mb-4"
           style={{ color: product.themeColor }}
         >
           The Details
         </span>
-        <h2 className="text-4xl md:text-5xl font-black text-white leading-tight mb-6">
+        <h2 className="text-3xl md:text-5xl font-black text-white leading-tight mb-4 md:mb-6">
           {product.details.title}
         </h2>
-        <p className="text-neutral-300 text-sm md:text-base leading-relaxed">
+        <p className="text-neutral-300 text-xs md:text-base leading-relaxed max-w-[300px] md:max-w-none">
           {product.details.description}
         </p>
       </motion.div>
@@ -128,18 +124,18 @@ export default function ProductTextOverlays({
       {/* Section 2: Freshness */}
       <motion.div
         style={{ opacity: opacities[2] }}
-        className="absolute inset-0 flex flex-col justify-center px-8 md:px-16 lg:px-24 ml-auto max-w-xl text-right"
+        className="absolute inset-0 flex flex-col justify-center px-6 md:px-16 lg:px-24 ml-auto max-w-xl text-right"
       >
         <span
-          className="text-xs font-semibold tracking-[0.3em] uppercase mb-4 block"
+          className="text-[10px] md:text-xs font-semibold tracking-[0.3em] uppercase mb-4 block"
           style={{ color: product.themeColor }}
         >
           Ingredients
         </span>
-        <h2 className="text-4xl md:text-5xl font-black text-white leading-tight mb-6">
+        <h2 className="text-3xl md:text-5xl font-black text-white leading-tight mb-4 md:mb-6">
           {product.freshness.title}
         </h2>
-        <p className="text-neutral-300 text-sm md:text-base leading-relaxed">
+        <p className="text-neutral-300 text-xs md:text-base leading-relaxed max-w-[300px] md:max-w-none ml-auto">
           {product.freshness.description}
         </p>
       </motion.div>
@@ -147,19 +143,19 @@ export default function ProductTextOverlays({
       {/* Section 3: Buy Now */}
       <motion.div
         style={{ opacity: opacities[3] }}
-        className="absolute inset-0 flex flex-col items-center justify-center text-center px-8"
+        className="absolute inset-0 flex flex-col items-center justify-center text-center px-6"
       >
         <span
-          className="text-xs font-semibold tracking-[0.3em] uppercase mb-4"
+          className="text-[10px] md:text-xs font-semibold tracking-[0.3em] uppercase mb-4"
           style={{ color: product.themeColor }}
         >
           Ready to Order?
         </span>
-        <h2 className="text-4xl md:text-6xl font-black text-white leading-tight mb-4">
+        <h2 className="text-3xl md:text-6xl font-black text-white leading-tight mb-2 md:mb-4">
           {product.buyNow.title}
         </h2>
         <div
-          className="text-5xl md:text-7xl font-black mb-10"
+          className="text-4xl md:text-7xl font-black mb-8 md:mb-10"
           style={{
             background: `linear-gradient(135deg, ${product.themeColor}, #fff)`,
             WebkitBackgroundClip: "text",
@@ -168,7 +164,7 @@ export default function ProductTextOverlays({
         >
           {product.buyNow.priceStr}
         </div>
-        <div className="pointer-events-auto flex gap-4 flex-wrap justify-center">
+        <div className="pointer-events-auto flex flex-col sm:flex-row gap-3 md:gap-4 justify-center items-center">
           <motion.button
             whileHover={{ scale: 1.06, boxShadow: `0 0 30px ${product.themeColor}80` }}
             whileTap={{ scale: 0.97 }}
@@ -176,14 +172,14 @@ export default function ProductTextOverlays({
               background: `linear-gradient(135deg, ${product.themeColor}, #F97316)`,
               boxShadow: `0 8px 30px ${product.themeColor}40`,
             }}
-            className="px-8 py-4 rounded-full font-bold text-black text-sm md:text-base transition-all duration-300"
+            className="px-6 md:px-8 py-3 md:py-4 rounded-full font-bold text-black text-xs md:text-base transition-all duration-300 w-full sm:w-auto min-w-[160px]"
           >
             Add to Cart
           </motion.button>
           <motion.button
             whileHover={{ scale: 1.06 }}
             whileTap={{ scale: 0.97 }}
-            className="px-8 py-4 rounded-full font-bold text-white text-sm md:text-base border border-white/20 backdrop-blur-sm bg-white/5 hover:bg-white/10 transition-all duration-300"
+            className="px-6 md:px-8 py-3 md:py-4 rounded-full font-bold text-white text-xs md:text-base border border-white/20 backdrop-blur-sm bg-white/5 hover:bg-white/10 transition-all duration-300 w-full sm:w-auto min-w-[160px]"
           >
             Learn More
           </motion.button>

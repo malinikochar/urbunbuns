@@ -99,8 +99,8 @@ export default function Footer() {
       </div>
 
       {/* Bottom bar */}
-      <div className="max-w-7xl mx-auto pt-8 border-t border-white/5 flex flex-col md:flex-row items-center justify-between gap-4">
-        <p className="text-xs text-neutral-500">
+      <div className="max-w-7xl mx-auto pt-8 border-t border-white/5 flex flex-col md:flex-row items-center justify-between gap-6 md:gap-4">
+        <p className="text-xs text-neutral-500 text-center md:text-left">
           © {new Date().getFullYear()} Urban Buns. All rights reserved.
         </p>
         <div className="flex gap-6">

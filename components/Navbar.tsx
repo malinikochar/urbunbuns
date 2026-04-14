@@ -8,13 +8,14 @@ export default function Navbar() {
       initial={{ y: -100 }}
       animate={{ y: 0 }}
       transition={{ duration: 0.8, ease: "easeOut" }}
-      className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 md:px-12 py-4 backdrop-blur-xl bg-black/30 border-b border-white/5"
+      className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-4 md:px-12 py-3 md:py-4 backdrop-blur-xl bg-black/30 border-b border-white/5"
     >
       {/* Logo */}
       <div className="flex items-center gap-3">
         <svg
-          width="36"
-          height="36"
+          width="28"
+          height="28"
+          className="md:w-[36px] md:h-[36px] drop-shadow-lg"
           viewBox="0 0 36 36"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
@@ -46,7 +47,7 @@ export default function Navbar() {
             strokeWidth="0.5"
           />
         </svg>
-        <span className="text-xl font-bold bg-gradient-to-r from-amber-400 to-orange-500 bg-clip-text text-transparent">
+        <span className="text-lg md:text-xl font-bold bg-gradient-to-r from-amber-400 to-orange-500 bg-clip-text text-transparent">
           Urban Buns
         </span>
       </div>
@@ -55,7 +56,7 @@ export default function Navbar() {
       <motion.button
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
-        className="relative px-6 py-2.5 rounded-full text-sm font-semibold text-black bg-gradient-to-r from-amber-400 to-orange-500 shadow-lg shadow-orange-500/25 hover:shadow-orange-500/40 transition-shadow duration-300"
+        className="relative px-4 md:px-6 py-2 md:py-2.5 rounded-full text-xs md:text-sm font-semibold text-black bg-gradient-to-r from-amber-400 to-orange-500 shadow-lg shadow-orange-500/25 hover:shadow-orange-500/40 transition-shadow duration-300"
       >
         Order Now
       </motion.button>
