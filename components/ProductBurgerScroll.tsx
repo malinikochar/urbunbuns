@@ -148,32 +148,78 @@ export default function ProductBurgerScroll({
     return () => { imagesRef.current = []; };
   }, [folderPath, totalFrames, frameExt, resizeCanvas, drawFrame]);
 
-  // Scroll handler — switches to scroll mode, resumes auto after 2s idle
+  // Scroll and Touch handler
   useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+
+    let touchStartX = 0;
+    let touchStartFrame = 0;
+    let isTouching = false;
+
     const handleScroll = () => {
-      const container = containerRef.current;
-      if (!container) return;
+      if (isTouching) return; // Touch takes priority
+
       const rect = container.getBoundingClientRect();
       const scrollableHeight = container.offsetHeight - window.innerHeight;
       const scrolled = -rect.top;
       const progress = Math.min(Math.max(scrolled / scrollableHeight, 0), 1);
 
-      // Only take over if user has actually scrolled into the section
       if (scrolled > 0) {
         isScrollingRef.current = true;
         currentFrameRef.current = progress * (totalFrames - 1);
 
-        // Reset auto-resume timer
         if (scrollTimeoutRef.current) clearTimeout(scrollTimeoutRef.current);
         scrollTimeoutRef.current = setTimeout(() => {
-          // Resume auto-loop from current position
           isScrollingRef.current = false;
         }, 2000);
       }
     };
+
+    const handleTouchStart = (e: TouchEvent) => {
+      isTouching = true;
+      isScrollingRef.current = true;
+      touchStartX = e.touches[0].clientX;
+      touchStartFrame = currentFrameRef.current;
+
+      if (scrollTimeoutRef.current) clearTimeout(scrollTimeoutRef.current);
+    };
+
+    const handleTouchMove = (e: TouchEvent) => {
+      if (!isTouching) return;
+      const touchX = e.touches[0].clientX;
+      const deltaX = touchX - touchStartX;
+      
+      // Sensitivity: Swiping across 80% of screen width = 1 full rotation
+      const sensitivity = 0.8;
+      const frameDelta = (deltaX / (window.innerWidth * sensitivity)) * totalFrames;
+      
+      // Update target frame (inverted for natural 'spin' direction)
+      currentFrameRef.current = touchStartFrame - frameDelta;
+      
+      // Optional: Prevent page scroll while spinning the burger
+      // if (Math.abs(deltaX) > 10) e.preventDefault();
+    };
+
+    const handleTouchEnd = () => {
+      isTouching = false;
+      // Resume auto-loop after 2s of inactivity
+      if (scrollTimeoutRef.current) clearTimeout(scrollTimeoutRef.current);
+      scrollTimeoutRef.current = setTimeout(() => {
+        isScrollingRef.current = false;
+      }, 2000);
+    };
+
     window.addEventListener("scroll", handleScroll, { passive: true });
+    container.addEventListener("touchstart", handleTouchStart, { passive: true });
+    container.addEventListener("touchmove", handleTouchMove, { passive: true });
+    container.addEventListener("touchend", handleTouchEnd, { passive: true });
+
     return () => {
       window.removeEventListener("scroll", handleScroll);
+      container.removeEventListener("touchstart", handleTouchStart);
+      container.removeEventListener("touchmove", handleTouchMove);
+      container.removeEventListener("touchend", handleTouchEnd);
       if (scrollTimeoutRef.current) clearTimeout(scrollTimeoutRef.current);
     };
   }, [totalFrames]);
