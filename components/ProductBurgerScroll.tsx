@@ -154,8 +154,10 @@ export default function ProductBurgerScroll({
     if (!container) return;
 
     let touchStartX = 0;
+    let touchStartY = 0;
     let touchStartFrame = 0;
     let isTouching = false;
+    let isHorizontalSwipe = false;
 
     const handleScroll = () => {
       if (isTouching) return; // Touch takes priority
@@ -178,8 +180,10 @@ export default function ProductBurgerScroll({
 
     const handleTouchStart = (e: TouchEvent) => {
       isTouching = true;
+      isHorizontalSwipe = false;
       isScrollingRef.current = true;
       touchStartX = e.touches[0].clientX;
+      touchStartY = e.touches[0].clientY;
       touchStartFrame = currentFrameRef.current;
 
       if (scrollTimeoutRef.current) clearTimeout(scrollTimeoutRef.current);
@@ -187,22 +191,35 @@ export default function ProductBurgerScroll({
 
     const handleTouchMove = (e: TouchEvent) => {
       if (!isTouching) return;
+      
       const touchX = e.touches[0].clientX;
+      const touchY = e.touches[0].clientY;
       const deltaX = touchX - touchStartX;
-      
-      // Sensitivity: Swiping across 80% of screen width = 1 full rotation
-      const sensitivity = 0.8;
-      const frameDelta = (deltaX / (window.innerWidth * sensitivity)) * totalFrames;
-      
-      // Update target frame (inverted for natural 'spin' direction)
-      currentFrameRef.current = touchStartFrame - frameDelta;
-      
-      // Optional: Prevent page scroll while spinning the burger
-      // if (Math.abs(deltaX) > 10) e.preventDefault();
+      const deltaY = touchY - touchStartY;
+
+      // Detection: If we haven't decided the swipe direction yet
+      if (!isHorizontalSwipe && Math.abs(deltaX) > 5) {
+        if (Math.abs(deltaX) > Math.abs(deltaY)) {
+          isHorizontalSwipe = true;
+        }
+      }
+
+      if (isHorizontalSwipe) {
+        // Lock vertical scroll while spinning horizontally
+        if (e.cancelable) e.preventDefault();
+        
+        // Sensitivity: Swiping across 80% of screen width = 1 full rotation
+        const sensitivity = 0.8;
+        const frameDelta = (deltaX / (window.innerWidth * sensitivity)) * totalFrames;
+        
+        // Update target frame (inverted for natural 'spin' direction)
+        currentFrameRef.current = touchStartFrame - frameDelta;
+      }
     };
 
     const handleTouchEnd = () => {
       isTouching = false;
+      isHorizontalSwipe = false;
       // Resume auto-loop after 2s of inactivity
       if (scrollTimeoutRef.current) clearTimeout(scrollTimeoutRef.current);
       scrollTimeoutRef.current = setTimeout(() => {
@@ -212,7 +229,8 @@ export default function ProductBurgerScroll({
 
     window.addEventListener("scroll", handleScroll, { passive: true });
     container.addEventListener("touchstart", handleTouchStart, { passive: true });
-    container.addEventListener("touchmove", handleTouchMove, { passive: true });
+    // touchmove MUST be { passive: false } to allow e.preventDefault() for the scroll lock
+    container.addEventListener("touchmove", handleTouchMove, { passive: false });
     container.addEventListener("touchend", handleTouchEnd, { passive: true });
 
     return () => {
