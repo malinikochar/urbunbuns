@@ -12,7 +12,7 @@ const sections = [
   { start: 0.0, end: 0.25, type: "intro" },
   { start: 0.25, end: 0.5, type: "details" },
   { start: 0.5, end: 0.75, type: "freshness" },
-  { start: 0.75, end: 1.0, type: "buy" },
+  { start: 0.75, end: 1.5, type: "buy" },
 ];
 
 function getSectionOpacity(

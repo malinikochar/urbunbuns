@@ -44,7 +44,7 @@ export default function Home() {
       </AnimatePresence>
 
       {/* Next burger CTA section */}
-      <section className="relative flex flex-col items-center justify-center py-32 px-6 text-center overflow-hidden">
+      <section className="relative flex flex-col items-center justify-center pt-12 pb-32 px-6 text-center overflow-hidden">
         {/* ambient glow */}
         <div
           className="absolute inset-0 opacity-20"
