@@ -149,9 +149,9 @@ export default function ProductTextOverlays({
       {/* Section 3: Buy Now */}
       <motion.div
         style={{ opacity: opacities[3] }}
-        className="absolute inset-0 flex flex-col items-center justify-end md:justify-center text-center px-6 pb-24 md:pb-0"
+        className="absolute inset-0 flex flex-col items-center justify-center text-center px-6 pb-24 md:pb-0"
       >
-        <div className="pt-[40vh] md:pt-0">
+        <div className="mt-[44vh] md:mt-0">
           <span
             className="text-[10px] md:text-xs font-semibold tracking-[0.3em] uppercase mb-4"
             style={{ color: product.themeColor }}

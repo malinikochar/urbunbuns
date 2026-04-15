@@ -249,7 +249,7 @@ export default function ProductBurgerScroll({
   }, [resizeCanvas]);
 
   return (
-    <div ref={containerRef} className="h-[380vh] relative">
+    <div ref={containerRef} className="h-[260vh] relative">
       <div className="sticky top-0 h-screen w-full flex items-center justify-center overflow-hidden">
         <canvas ref={canvasRef} className="w-full h-full" />
       </div>
